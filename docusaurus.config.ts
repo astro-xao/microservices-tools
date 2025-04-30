@@ -86,7 +86,7 @@ const config: Config = {
           position: 'right',
         },        
         {
-          href: 'https://github.com/astro-xao/microservice-tools',
+          href: 'https://github.com/astro-xao/microservices-tools',
           label: 'GitHub',
           position: 'right',
         },
@@ -109,7 +109,7 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/astro-xao/microservice-tools',
+              href: 'https://github.com/astro-xao/microservices-tools',
             },
           ],
         },
