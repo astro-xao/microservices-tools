@@ -1,0 +1,187 @@
+---
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 容器化工具
+**容器化** 是一种软件开发和部署技术，它将应用程序及其所有依赖项（如库、配置文件等）打包到一个轻量级、独立的容器中。容器可以在任何支持容器运行时的环境中运行，从而确保应用程序在不同环境中的一致性和可移植性。
+这里列出一些常用的构建容器镜像的工具。
+
+## Docker CLI
+最常用的容器镜像构建工具，直接使用 [Dockerfile](https://docs.docker.com/reference/dockerfile/) 构建镜像。
+
+示例：
+
+```bash
+docker build -t my-image:latest .
+```
+如果没有安装 docker，可参考以下安装指南。
+### [官方安装指南](https://docs.docker.com/engine/install/)
+### Ubuntu 安装
+<Tabs>
+  <TabItem value="0" label="1.卸载所有冲突的包">
+    ```bash
+    for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+    ```
+  </TabItem>
+  <TabItem value="1" label="2. 更新 apt 源">
+    ```
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    ```    
+  </TabItem>
+  <TabItem value="2" label="3. 安装最新版 Docker" default>
+    ```bash
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    ```
+  </TabItem>
+  <TabItem value="3" label="4. 指定版本安装(可选)">
+    ```bash
+    # List the available versions:
+    apt-cache madison docker-ce | awk '{ print $3 }'
+
+    5:28.1.1-1~ubuntu.24.04~noble
+    5:28.1.0-1~ubuntu.24.04~noble
+    ...
+    ```
+    ```bash
+    VERSION_STRING=5:28.1.1-1~ubuntu.24.04~noble
+    sudo apt-get install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-buildx-plugin docker-compose-plugin
+    ```
+  </TabItem>
+</Tabs>
+### Debian 安装
+<Tabs>
+  <TabItem value="0" label="1.卸载所有冲突的包">
+    ```bash
+    for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+    ```
+  </TabItem>
+  <TabItem value="1" label="2. 更新 apt 源">
+    ```
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    ```    
+  </TabItem>
+  <TabItem value="2" label="3. 安装最新版 Docker" default>
+    ```bash
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    ```
+  </TabItem>
+  <TabItem value="3" label="4. 指定版本安装(可选)">
+    ```bash
+    # List the available versions:
+    apt-cache madison docker-ce | awk '{ print $3 }'
+
+    5:28.1.1-1~debian.12~bookworm
+    5:28.1.0-1~debian.12~bookworm
+    ...
+    ```
+    ```bash
+    VERSION_STRING=5:28.1.1-1~debian.12~bookworm
+    sudo apt-get install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-buildx-plugin docker-compose-plugin
+    ```
+  </TabItem>
+</Tabs>
+
+## Buildah
+Buildah 专门用于构建 OCI 镜像。Buildah 的命令复制了 Dockerfile 中的所有命令。无需 Docker 守护进程。
+### 安装
+https://github.com/containers/buildah/blob/main/install.md
+### 示例
+```bash
+buildah bud -t my-image:latest .
+buildah push my-image:latest docker://my-registry/my-image:latest
+```
+
+## Kaniko
+kaniko 是一个用于在容器或 Kubernetes 集群内根据 Dockerfile 构建容器镜像的工具。无需 Docker 守护进程。
+kaniko 以容器镜像发布:
+<Tabs>
+    <TabItem value="1" label="executor images">
+    ```
+    gcr.io/kaniko-project/executor:v1.23.2
+    gcr.io/kaniko-project/executor:latest
+    ```
+    </TabItem>
+    <TabItem value="2" label="debug  images">
+    ```
+    gcr.io/kaniko-project/executor:debug
+    gcr.io/kaniko-project/executor:v1.23.2-debug
+    ```
+    </TabItem>
+    <TabItem value="3" label="slim executor images">
+    ```
+    gcr.io/kaniko-project/executor:slim
+    gcr.io/kaniko-project/executor:v1.23.2-slim
+    ```
+    </TabItem>
+</Tabs>
+### 使用指南
+参考：https://github.com/GoogleContainerTools/kaniko?tab=readme-ov-file#using-kaniko
+
+## ko
+快速构建和推送容器镜像的工具，专为 Go 应用设计。无需 Dockerfile, 自动将 Go 应用打包为容器镜像, 简化了容器化流程。非常适合在 CI/CD 环境使用。
+
+### 安装
+**官方安装指南**: https://ko.build/install/
+- 从 github release
+    ```bash
+    # 设置
+    VERSION=TODO # choose the latest version (without v prefix)
+    OS=Linux     # or Darwin
+    ARCH=x86_64  # or arm64, i386, s390x
+
+    # 下载&验证包
+    curl -sSfL "https://github.com/ko-build/ko/releases/download/v${VERSION}/ko_${VERSION}_${OS}_${ARCH}.tar.gz" > ko.tar.gz
+    $ curl -sSfL https://github.com/ko-build/ko/releases/download/v${VERSION}/multiple.intoto.jsonl > multiple.intoto.jsonl
+    $ slsa-verifier verify-artifact --provenance-path multiple.intoto.jsonl --source-uri github.com/ko-build/ko --source-tag "v${VERSION}" ko.tar.gz
+
+    # 解压
+    tar xzf ko.tar.gz ko
+    chmod +x ./ko
+    ```
+- Homebrew
+    ```bash
+    brew install ko
+    ```
+- MacPorts
+    ```
+    sudo port install ko
+    ```
+- Windows scoop
+    ```
+    scoop install ko
+    ```
+- Alpine Linux
+    ```
+    echo https://dl-cdn.alpinelinux.org/alpine/edge/testing/ >> /etc/apk/repositories
+    apk update
+    apk add ko
+    ```
+
+
