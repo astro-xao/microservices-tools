@@ -6,7 +6,7 @@ slug: protocol-buffers
 # Protocol Buffers 编译器安装及多语言编译
 
 ## Protocol Buffers 简介
-[Protocol Buffers](https://protobuf.dev/) [Protocol Buffers (中文)](https://astro-xao.github.io/protocolbuffers.github.io/) 是一种与语言无关、与平台无关的可扩展机制，用于序列化结构化数据。
+[Protocol Buffers](https://protobuf.dev/) | [Protocol Buffers (中文)](https://astro-xao.github.io/protocolbuffers.github.io/) 是一种与语言无关、与平台无关的可扩展机制，用于序列化结构化数据。
 
 ## Protocol Buffers 安装
 
