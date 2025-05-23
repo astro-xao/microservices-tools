@@ -118,8 +118,8 @@ const config: Config = {
     },
 
     prism: {
-      theme: prismThemes.vsLight,
-      darkTheme: prismThemes.vsDark,
+      theme: prismThemes.vsDark,
+      darkTheme: prismThemes.oneDark,
     },
   } satisfies Preset.ThemeConfig,
   plugins: [tailwindPlugin],
